@@ -1,0 +1,100 @@
+.mes_number {
+  height: .3rem;
+  width: 2.13rem;
+  border: none;
+  border-bottom: .005rem solid #E5E5E5;
+  background: url('../img/tel off.png') no-repeat 0 .08rem;
+  background-size: .14rem .14rem;
+  margin-top: .57rem;
+  display: inline-block;
+  padding-left: .27rem;
+  font-size: .13rem;
+}
+
+/*电话的图标 灰*/
+
+.mes_input_number {
+  border: none;
+  float: left;
+  color: #adadad;
+  line-height: .28rem;
+  font-size: .14rem;
+}
+
+/*所有输入框的样式*/
+
+.mes_input_code {
+  width: 0.8rem;
+}
+
+.mes_code {
+  margin-top: .14rem;
+  background: url('../img/code off.png') no-repeat 0 .08rem;
+  background-size: .14rem .14rem;
+}
+
+/*验证码的图标 灰*/
+
+.mes_password {
+  margin-top: .14rem;
+  background: url('../img/lock off.png') no-repeat 0 .08rem;
+  background-size: .14rem .14rem;
+}
+
+/*密码的图标 灰*/
+
+.mes_get_code {
+  font-size: .13rem;
+  background: none;
+  color: #74CB26;
+  border: none;
+  float: right;
+  line-height: .3rem;
+}
+
+.mes_login {
+  width: 2.4rem;
+  height: .4rem;
+  border: none;
+  border-radius: .2rem;
+  background: #e5e5e5;
+  font-size: .15rem;
+  color: #FFFFFF;
+  margin-top: .48rem;
+}
+
+.free_register_mes {
+  font-size: .1rem;
+  margin-top: .1rem;
+  display: block;
+  color: #606060;
+}
+
+.free_register_mes_blue {
+  color: #2d7ddb;
+}
+
+.free_button {
+  width: 2.4rem;
+  height: .4rem;
+  border: 1px solid #74CB26;
+  border-radius: .2rem;
+  background: none;
+  font-size: .15rem;
+  color: #74CB26;
+  margin-top: .3rem;
+}
+
+/*id_free_button是账号密码登录页面的 密码登录按钮的css*/
+
+.id_free_button {
+  margin-top: .5rem;
+}
+
+.forget {
+  line-height: .22rem;
+  color: #3884dd;
+  display: block;
+  margin-top: .15rem;
+  font-size: .11rem;
+}

@@ -1,0 +1,37 @@
+.free_earth{
+  height: 2.23rem;
+  width: 3.2rem;
+  background: url('../img/Earth Icon.png') no-repeat 0 .25rem;
+  background-size: 100% ;
+}
+.free_register{
+  width: 2.4rem;
+  height: .4rem;
+  border: none;
+  border-radius: .2rem;
+  background: #74CB26;
+  color: white;
+  font-size: .15rem;
+}
+.free_register_mes{
+  font-size: .1rem;
+  margin-top: .1rem;
+  display: block;
+  color: #606060;
+}
+.free_register_mes_blue{
+  color: #2d7ddb;
+}
+.free_button{
+  width: 2.4rem;
+  height: .4rem;
+  border:1px solid #74CB26;
+  border-radius: .2rem;
+  background: none;
+  font-size: .15rem;
+  color: #74CB26;
+  margin-top: .48rem;
+}
+.free_button_code{
+  margin-top: .09rem;
+}

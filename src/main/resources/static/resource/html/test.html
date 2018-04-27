@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+<head>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/rollups/aes.js"></script>
+    <script type="text/javascript" src="../js/rollups/md5.js"></script>
+
+    <script>
+        // 对Date的扩展，将 Date 转化为指定格式的String
+        // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+        // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+        // 例子：
+        // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+        // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+
+
+
+
+
+
+        $(document).ready(function(){
+            Date.prototype.Format = function (fmt) { //author: meizz
+                var o = {
+                    "M+": this.getMonth() + 1, //月份
+                    "d+": this.getDate(), //日
+                    "h+": this.getHours(), //小时
+                    "m+": this.getMinutes(), //分
+                    "s+": this.getSeconds(), //秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                    "S": this.getMilliseconds() //毫秒
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            };
+
+            //alert("md5: "+CryptoJS.MD5(""));
+//            20180329093107402
+            var time1 = new Date().Format("yyyyMMddhhmmssSS").replace("S","");
+//            var dateStr=date.format("yyyy-MM-dd hh:mm:ss.SSS");
+//            var time2 = new Date().Format("yyyy-MM-dd hh:mm:ss.S");
+//            window.alert(time1);
+//            window.alert(time2);
+
+            CryptoJS.AES.encrypt("Message", "Secret Passphrase");
+
+            var str = '{"phonescrip":"55EEA9815479D2B0A856BFCBE960A27E6D01D8A308ABC468CC51D12DD07221CE11881EF83AA52BE718C2136303EB9D20D8440B5F38FC8ABB8C0CFB82FD22C4081960D997286C9FAA983F4EAAB5DC7EB8BB3F8EE583879C3A7691FE3BE99CB18B147B5723AA7880086289177D5AAE5D9EE2F56647B7442C6FB755D2CB12B08860","openId":"igpQStpB1iC82zDBEpuheJRcXOYk9Y0m7xB_sfECD3iXNpVWo76E","securityphone":"187****5645"}';
+            str=CryptoJS.enc.Utf8.parse(str);
+
+            var key = 'F713503E4DA34C11';
+
+            var iv = '';
+            key = CryptoJS.enc.Utf8.parse(key);
+            iv = CryptoJS.enc.Utf8.parse(iv);
+
+            var encrypted = CryptoJS.AES.encrypt(str, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+
+            encrypted = encrypted.toString();
+//alert("encrypted： "+encrypted);
+
+            var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+
+            decrypted = CryptoJS.enc.Utf8.stringify(decrypted);
+
+//alert("decrypted： "+decrypted.toString());
+
+            ckRequest();
+//            getphonescrip();
+//            getAuthToken();
+        });
+
+        function ckRequest() {
+            var param={};
+            var appKey="4C68F66E35B51861A4F76ACCEA1ACE1E";
+            param.ver="1.0";
+            param.interfacever="3.0";
+            param.sdkver="quick_login_android_5.3.1.180116";
+            param.appid="300011846519";
+            param.msgid="abfb74c0aeff45839fdf24c1278b2e98";
+            param.timestamp=new Date().Format("yyyyMMddhhmmssSS").replace("S","");
+
+//            param.keyid="863254038307152da28ef25d83a4c0190fd32c46445c518";
+            param.keyid="124213456232321da28ef25d83a4c0190fd32c46445c518";
+            var sign =param.ver + param.sdkver + param.appid + param.msgid + param.keyid + param.timestamp + appKey;
+            sign = CryptoJS.MD5(sign);
+            sign = sign.toString().toUpperCase();
+            param.sign=sign;
+            console.log(param.toString);
+//            var param={"ver":"1.0","interfacever":"3.0","sdkver":"quick_login_android_5.3.1.180116","appid":"300011846519","msgid":"d71b74c0aeff45839fdf24c1278b2e98","timestamp":"20180329093107402","sign":"AAA15A062A2AEC266769FBCD108F4B78","keyid":"863254038307152da28ef25d83a4c0190fd32c46445c518"};
+
+            $.ajax(
+                    {
+                url: "https://www.cmpassport.com/unisdk/rs/ckRequest",
+                type: "post",
+                dataType: "text",
+                data: JSON.stringify(param),
+                        crossDomain : true,
+                        xhrFields: {
+                            withCredentials: true
+                        }
+            }).done(function( data ) {
+                        console.log("done");
+                    })
+                    .fail( function(xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseText);
+                        console.log(textStatus);
+                    });
+
+//            $.post("https://www.cmpassport.com/unisdk/rs/ckRequest",
+//                    param,
+//                    function(data,status){
+//                        alert("数据: \n" + data + "\n状态: " + status);
+//                    });
+        }
+
+        function getphonescrip(){
+            var ver="1.0";
+            var sdkver="quick_login_android_5.3.1.180116";
+            var appid="300011846519";
+            var authtype="3";
+            var smskey="";
+            var imsi="460027802181440";
+            var imei="863254038307152";
+            var operatortype="1";
+            var networktype="3";
+            var mobilebrand="Xiaomi";
+            var mobilemodel="MI+6";
+            var mobilesystem="android8.0.0";
+            var clienttype="0";
+            var msgid="af264ac7b2624ba8ac813a5797901c79";
+            var timestamp=new Date().Format("yyyyMMddhhmmssSS").replace("S","");
+            var appkey="4C68F66E35B51861A4F76ACCEA1ACE1E";
+            var acpuid="OPR1.170623.027";
+            var adevmac="02:00:00:00:00:00";
+            var asimnum="89860117831009795484";
+            var gwip="192.168.1.115";
+            var acellid="";
+            var alac="";
+            var amnc="1";
+            var subimsi="863254038307152";
+            var subimei="863254038307152";
+
+
+            var sign=ver + sdkver + appid + authtype + smskey + imsi+ imei+ operatortype + networktype + mobilebrand + mobilemodel + mobilesystem + clienttype +
+                    msgid + timestamp + appkey+acpuid + adevmac + asimnum + gwip + acellid + alac + amnc + subimsi + subimei;
+            sign = CryptoJS.MD5(sign);
+            console.log("getphonescrip sign:"+sign);
+
+            var reqdataBeforeEncrpt= {};
+            reqdataBeforeEncrpt.ver=ver;
+            reqdataBeforeEncrpt.sdkver=sdkver;
+            reqdataBeforeEncrpt.appid=appid;
+            reqdataBeforeEncrpt.authtype=authtype;
+            reqdataBeforeEncrpt.smskey=smskey;
+            reqdataBeforeEncrpt.imsi=imsi;
+            reqdataBeforeEncrpt.imei=imei;
+            reqdataBeforeEncrpt.operatortype=operatortype;
+            reqdataBeforeEncrpt.networktype=networktype;
+            reqdataBeforeEncrpt.mobilebrand=mobilebrand;
+            reqdataBeforeEncrpt.mobilemodel=mobilemodel;
+            reqdataBeforeEncrpt.mobilesystem=mobilesystem;
+            reqdataBeforeEncrpt.clienttype=clienttype;
+            reqdataBeforeEncrpt.msgid=msgid;
+            reqdataBeforeEncrpt.timestamp=timestamp;
+            reqdataBeforeEncrpt.acpuid=acpuid;
+            reqdataBeforeEncrpt.adevmac=adevmac;
+            reqdataBeforeEncrpt.asimnum=asimnum;
+            reqdataBeforeEncrpt.gwip=gwip;
+            reqdataBeforeEncrpt.acellid=acellid;
+            reqdataBeforeEncrpt.alac=alac;
+            reqdataBeforeEncrpt.amnc=amnc;
+            reqdataBeforeEncrpt.subimsi=subimsi;
+            reqdataBeforeEncrpt.subimei=subimei;
+            reqdataBeforeEncrpt.sign=sign.toString().toUpperCase();
+            var str =JSON.stringify(reqdataBeforeEncrpt);
+            console.log("reqdataBeforeEncrpt"+str);
+
+//            Reqdata生成：采用ckRequest接口获取到privateKey和上述字段，进行AES加密生成。AesUtis.encryt(privateKey,content);
+//            var str='{"ver":"1.0","sdkver":"quick_login_android_5.3.1.180116","appid":"300011846519","authtype":"3","smskey":"","imsi":"460027802181440",' +
+//                    '"imei":"863254038307152","operatortype":"1","networktype":"3","mobilebrand":"Xiaomi","mobilemodel":"MI+6",' +
+//                    '"mobilesystem":"android8.0.0","clienttype":"0","msgid":"af264ac7b2624ba8ac813a5797901c79","timestamp":"20180329102120941",' +
+//                    '"acpuid":"OPR1.170623.027","adevmac":"02:00:00:00:00:00","asimnum":"89860117831009795484","gwip":"192.168.1.115","acellid":"",' +
+//                    '"alac":"","amnc":"1","subimsi":"863254038307152","subimei":"863254038307152","sign":"DAF136D9A6D8695C3705B56765855E71"}';
+
+            CryptoJS.AES.encrypt("Message", "Secret Passphrase");
+
+//            var str = '{"phonescrip":"55EEA9815479D2B0A856BFCBE960A27E6D01D8A308ABC468CC51D12DD07221CE11881EF83AA52BE718C2136303EB9D20D8440B5F38FC8ABB8C0CFB82FD22C4081960D997286C9FAA983F4EAAB5DC7EB8BB3F8EE583879C3A7691FE3BE99CB18B147B5723AA7880086289177D5AAE5D9EE2F56647B7442C6FB755D2CB12B08860","openId":"igpQStpB1iC82zDBEpuheJRcXOYk9Y0m7xB_sfECD3iXNpVWo76E","securityphone":"187****5645"}';
+            str=CryptoJS.enc.Utf8.parse(str.toString());
+
+            var key = 'D8B8A7E14D914AA4';
+
+            var iv = '';
+
+
+            key = CryptoJS.enc.Utf8.parse(key);
+            iv = CryptoJS.enc.Utf8.parse(iv);
+
+            var encrypted = CryptoJS.AES.encrypt(str, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+//            encrypted = encrypted.toString();
+////            alert(encrypted);
+//
+//            var param={
+//                "interfacever":"4.0",
+//                "ver":"1.0",
+//                "keyid":"124213456232321da28ef25d83a4c0190fd32c46445c518",
+//                "reqdata":"pATYljEvsqAVhr4177hVNKPWPt1r9DHY/ZmKyonODokldX/OFsL55VqoK/G+ 2yRQmk+H483Ep+DByrCbfIyOJvBBJsdNwp+npx0x/+1AMTxjOLuNTM5bLZI1 Y9+eUmtcaYfujqDxjkCZtJrPFShAzAA03c3wTEgZtWktcCtUCTapDnkb/+S6 zAZPYqIfWKqeUdtf1zxuzIjtrFzy210i1Kh3aAyNWGG5XXqfh163O+bajmft nX7PVJMF31YtsbPzqdP9fVX1hRysjKlh0ZFDxhwkam3XrpJCjL0N0/Uaj+xj BKw+XrSSCulg73G+uFN6Q95IRHHjOWICu3g8m9YiDAIkXov5CpPzMBwFwFib 3SebJlCkaMmAeUJDSoaZuk1gu8WXPAaCPNxZdIxXpwBSTWv6qAmaqMyn960p x92CxSuQPDpF1dKF2OO1SBvdeSMhFdvOr9jHzOQ+9Uq+RXw8gW135nQxPzrN AISo78r2+DhlFI+pXjwuFpxs/s4bJfZC0tyo0aPM6xJoUDPGJvklm3oey+M4 O1J5n5YiC6HE8cIZAetUknB3sNSKfvgthl2UtLKFgq06OoNpYxky0CkLyXqo u/r0MRMuOw9AYY7XSJ1iyi0miqXuVHEYFgzHcgpI1wLyyMuxMVmOd1tLgXhX 4qiGJCl8hX71kEcWLlN3mL9kcXCXHDQO/8FV5VAm4KbsJdu+0vwM6KBMj7sA o3ZW7657J6SGWzAoejCNRJp6oiIs/DZlVo0w0ABIrwe1Zz7QMIoHbQ3HXC4s It9rncUbN39J2RMLSthiBsyg3xuw8wc="
+//            };
+
+            var param={};
+            param.interfacever="4.0";
+            param.ver="1.0";
+            param.keyid="124213456232321da28ef25d83a4c0190fd32c46445c518";
+            param.reqdata=encrypted.toString();
+
+//            alert("param.ver: "+param.ver);
+            console.log(JSON.stringify(param));
+
+            $.post("http://www.cmpassport.com/unisdk/rs/getphonescrip",
+                    param,
+                    function(data,status){
+                        alert("数据: \n" + data + "\n状态: " + status);
+                    });
+        }
+
+        function getAuthToken() {
+//            {
+//                "version":"0.1",
+//                    "msgid":"74a82e2752cf4236b26b7c6de8d3b1be",
+//                    "appid":"300011846519",
+//                    "scrip":"55EEA9815479D2B0A856BFCBE960A27E6D01D8A308ABC468CC51D12DD07221CE11881EF83AA52BE718C2136303EB9D20D8440B5F38FC8ABB8C0CFB82FD22C4081960D997286C9FAA983F4EAAB5DC7EB8BB3F8EE583879C3A7691FE3BE99CB18B147B5723AA7880086289177D5AAE5D9EE2F56647B7442C6FB755D2CB12B08860",
+//                    "sign":"586547819781655BCD3B9EEB8747778E",
+//                    "interfacever":"2.0",
+//                    "userCapaid":"200"
+//            }
+
+//            version + appid + appkey + script
+            var version="0.1";
+            var msgid="74a82e2752cf4236b26b7c6de8d3b1be";
+            var appid="300011846519";
+            var script="55EEA9815479D2B0A856BFCBE960A27E6D01D8A308ABC468CC51D12DD07221CE11881EF83AA52BE718C2136303EB9D20D8440B5F38FC8ABB8C0CFB82FD22C4081960D997286C9FAA983F4EAAB5DC7EB8BB3F8EE583879C3A7691FE3BE99CB18B147B5723AA7880086289177D5AAE5D9EE2F56647B7442C6FB755D2CB12B08860";
+            var appkey="4C68F66E35B51861A4F76ACCEA1ACE1E";
+            var sign = version+appid+appkey+script;
+            sign = CryptoJS.MD5(sign);
+            console.log("getAuthToken: "+sign);
+//            alert(sign);
+            var param ={"version":"0.1","msgid":"74a82e2752cf4236b26b7c6de8d3b1be","appid":"300011846519","scrip":"55EEA9815479D2B0A856BFCBE960A27E6D01D8A308ABC468CC51D12DD07221CE11881EF83AA52BE718C2136303EB9D20D8440B5F38FC8ABB8C0CFB82FD22C4081960D997286C9FAA983F4EAAB5DC7EB8BB3F8EE583879C3A7691FE3BE99CB18B147B5723AA7880086289177D5AAE5D9EE2F56647B7442C6FB755D2CB12B08860","sign":"586547819781655BCD3B9EEB8747778E","interfacever":"2.0","userCapaid":"200"};
+
+            $.post("https://www.cmpassport.com/unisdk/api/getAuthToken",
+                    param,
+                    function(data,status){
+                        alert("数据: \n" + data + "\n状态: " + status);
+                    });
+
+        }
+
+    </script>
+</head>
+<body>
+<iframe id="cmFrame" name="cmFrame"  scrolling="no" frameborder="0"></iframe>
+<form action="https://www.cmpassport.com/unisdk/rs/ckRequest" method="post">
+
+    <input type="text" name="fname" />
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>

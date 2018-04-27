@@ -1,0 +1,127 @@
+input{
+  outline:none
+}
+
+.el-content{
+  margin-top: .57rem;
+  text-align: center;
+}
+
+.el-input{
+  height: 0.3rem;
+  display:inline-flex;
+  width: 2.4rem;
+  margin-top: 0.1rem;
+  border-bottom: #e5e5e5 1px solid;
+}
+
+.icon {
+  display: block;
+  height: .3rem;
+  width: .3rem;
+  max-width: 30px;
+  transform: scale(.6);
+  background-image: url(../img/icon.png);
+  background-repeat: no-repeat;
+}
+
+.el-input input{
+  border: none;
+  font-size: .12rem;
+  padding-left: 0.06rem;
+  padding-bottom: .02rem;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #9e9e9e;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #9e9e9e;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #9e9e9e;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+   color:    #9e9e9e;
+}
+
+input[placeholder="验证码"] {
+  width: 1rem;
+}
+
+.el-input-active{
+  border-bottom: #74cb26 1px solid;
+}
+
+.icon-tel{
+  background-position: -198px 0;
+}
+
+.icon-tel-active{
+  background-position: -238px 0;
+}
+
+
+.icon-code-active{
+  background-position: 0px 0;
+}
+
+.icon-code{
+  background-position: -359px -3px;
+}
+
+
+.icon-user {
+  background-position: -278px 0;
+}
+
+.icon-user-active {
+  background-position: -318px 0;
+}
+
+
+.icon-lock {
+  background-position: -78px 0;
+}
+
+.icon-lock-active {
+  background-position: -118px 0;
+}
+
+span.button-code {
+  color: #74CB26;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  font-size: .12rem;
+  text-align: right;
+  width: 1rem;
+}
+
+.code-countdown{
+  color: #AAAAAA !important;
+}
+
+.tips{
+  background: #FFF2E7 ;
+  color:#FF7C49;
+  padding: 0.05rem 0;
+  position: relative;
+  font-size: .12rem;
+  margin-bottom: -.27rem;
+  visibility:hidden;
+}
+
+.tips:before {
+  content: '';
+  position: absolute;
+  height: .3rem;
+  width: .3rem;
+  top: -.01rem;
+  left: .05rem;
+  background-image: url(../img/icon.png);
+  transform: scale(.55);
+  background-position: -402px -2px;
+  background-repeat: no-repeat;
+}

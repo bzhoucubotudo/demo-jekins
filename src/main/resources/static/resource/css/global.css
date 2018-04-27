@@ -1,0 +1,3 @@
+html{width: 100%;height: 100%;}
+#index {position: relative;max-width: 3.2rem;height: 100%;margin: 0 auto;zoom: 1;}
+.clearfix:after{display:block; content:'clear'; clear:both; line-height:0; visibility:hidden;}
